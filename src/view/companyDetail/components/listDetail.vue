@@ -92,7 +92,7 @@
                 <h3 class="detail-title">企业简介</h3>
             </van-cell>
             <van-cell>
-                <div style="display: flex;justify-content: space-between;align-items: center;" @click="toCompanyDetail">
+                <div style="display: flex;justify-content: space-between;align-items: center;">
                     <div>
                         <div style="display: flex;align-items: center;">
                             <div>
@@ -118,24 +118,6 @@
                     <div>
                         <van-icon name="arrow" style="font-size: 24px;" />
                     </div>
-                </div>
-            </van-cell>
-        </div>
-
-        <div class="detail-footer">
-            <van-cell style="position: fixed; bottom: 0;">
-                <div class="footer-flex">
-                    <span style="margin-right: 20px;">
-                        <van-image round width="3rem" height="3rem"
-                            src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-                    </span>
-                    <span style="margin-right: 20px;">XXXX</span>
-                    <a class="call-phone" :href="'tel:' + detailValue.customer.mobile">
-                        <span style="margin-right: 5px;">
-                            <van-icon name="phone" />
-                        </span>
-                        <span>电话咨询</span>
-                    </a>
                 </div>
             </van-cell>
         </div>

@@ -25,27 +25,19 @@ const routes = [
     }
   },
   {
-    name: 'user',
-    path: '/user',
-    component: () => import('@/view/user/index.vue'),
+    name: 'companyDetail',
+    path: '/companyDetail',
+    component: () => import('@/view/companyDetail/index.vue'),
     meta: {
-      title: '会员中心'
+      title: 'detail'
     }
   },
   {
-    name: 'cart',
-    path: '/cart',
-    component: () => import('@/view/cart/index.vue'),
+    name: 'listDetail',
+    path: '/listDetail',
+    component: () => import('@/view/companyDetail/components/listDetail.vue'),
     meta: {
-      title: '购物车'
-    }
-  },
-  {
-    name: 'goods',
-    path: '/goods',
-    component: () => import('@/view/goods/index.vue'),
-    meta: {
-      title: '商品详情'
+      title: 'listDetail'
     }
   }
 ]

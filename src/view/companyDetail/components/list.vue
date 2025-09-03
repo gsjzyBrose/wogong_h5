@@ -1,72 +1,5 @@
 <template>
     <div class="home">
-        <van-nav-bar v-if="!showSearch">
-            <template #right>
-                <van-icon name="search" size="18" @click="searchList" />
-            </template>
-        </van-nav-bar>
-        <van-search
-          background="#2ee3d0"
-          show-action
-          placeholder="搜索"
-          v-if="showSearch"
-        />
-        <van-dropdown-menu>
-            <van-dropdown-item title="全国" ref="itemRef">
-                <van-tree-select
-                  v-model:active-id="activeId"
-                  v-model:main-active-index="activeIndex"
-                  :items="treeData"
-                  @click-item="changeCity"
-                />
-               <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="itemRef.toggle();">重置</van-button>
-                 <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
-               </div>
-            </van-dropdown-item>
-            <van-dropdown-item v-model="value2" :options="option2" />
-            <van-dropdown-item title="筛选">
-                 <van-cell class="tag-label">
-                    <span>职位类型:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.workPayTypeOption" :key="item.value" :class="searchFormRef.post_type == item.value ? 'isActive': ''" @click="changeValue(item, 'post_type')"> {{ item.label }} </span>
-                 </van-cell>
-                 <!-- <van-cell class="tag-label">
-                    <span>民族:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.ethnicity" :key="item.value" :class="searchFormRef.ethnicity == item.value ? 'isActive': ''" @click="changeValue(item, 'ethnicity')"> {{ item.label }} </span>
-                 </van-cell> -->
-                 <van-cell class="tag-label">
-                    <span>年龄:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.ageOptions" :key="item.value" :class="searchFormRef.age_option == item.value ? 'isActive': ''" @click="changeValue(item, 'age_option')"> {{ item.label }} </span>
-                 </van-cell>
-                 <van-cell class="tag-label">
-                    <span>学历要求:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.education" :key="item.value" :class="searchFormRef.education == item.value ? 'isActive': ''" @click="changeValue(item, 'education')"> {{ item.label }} </span>
-                 </van-cell>
-                  <van-cell class="tag-label">
-                    <span>职位福利:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.benefitsOptions" :key="item.value" :class="searchFormRef.job_benefits == item.value ? 'isActive': ''" @click="changeValue(item, 'job_benefits')"> {{ item.label }} </span>
-                 </van-cell>
-                 <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;">重置</van-button>
-                 <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
-               </div>
-            </van-dropdown-item>
-        </van-dropdown-menu>
         <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
             <van-cell-group class="list-item" v-for="item in listAll" :key="item.job_id" @click="toDetail()">
                 <van-cell value-class="job-info">
@@ -89,21 +22,6 @@
                 </van-cell>
                 <van-cell value-class="job-tab">
                     <van-tag round type="primary" style="color: #999999;" color="#f5f5f5" v-for="(tagItem, index) in item.tags" :key="index">{{ tagItem }}</van-tag>
-                </van-cell>
-                <van-cell value-class="job-from">
-                    <van-row>
-                        <van-col span="16" class="from-company">
-                            <span style="display: flex;">
-                                <van-image width="28" height="28" radius="5"
-                                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
-                            </span>
-                            <span style="margin-left: 5px;" class="company-name">{{ item.company.name }}</span>
-                        </van-col>
-                        <van-col span="8" class="date-adress">
-                            <span style="margin-right: 8px; font-size: 0.8rem;">{{ item.company.base }}</span>
-                            <span style="font-size: 0.8rem">07-06</span>
-                        </van-col>
-                    </van-row>
                 </van-cell>
             </van-cell-group>
         </van-list>
@@ -258,7 +176,7 @@ const onLoad = () => {
     }, 1000);
 };
 const toDetail = () => { 
-   router.push('detail');
+   router.push('listDetail');
 }
 const searchList = () => {
     showSearch.value = true
@@ -310,6 +228,7 @@ const onConfirm = () => {
 .job-tab {
     display: flex;
     justify-content:flex-start;
+    padding-bottom: 5px;
     >.van-tag {
         padding: 2px 5px;
         margin-right: 10px;
