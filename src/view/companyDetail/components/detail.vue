@@ -74,7 +74,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, onUnmounted, nextTick } from 'vue';
+import { ref, reactive, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import router from '@/router';
 const detailValue = ref()
 const showIntoduce = ref(false)
@@ -215,7 +215,7 @@ onMounted(() => {
     })
 
 });
-onUnmounted(() => {
+onBeforeUnmount(() => {
     // 组件卸载时停止监听，防止内存泄漏
     if (resizeObserver) {
         resizeObserver.unobserve(intoduceElement.value);

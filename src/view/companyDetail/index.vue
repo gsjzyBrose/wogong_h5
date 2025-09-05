@@ -1,13 +1,13 @@
 <template>
     <van-cell class="company-info">
         <div>
-            <div style="display: flex;align-items: center;">
+            <div style="display: flex;align-items: center;padding-left: 1rem;">
                 <div style="margin-right: 10px;">
-                    <van-image width="3rem" height="3rem" fit="cover" position="left"
-                        src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                    <van-image width="3.5rem" height="3.5rem" fit="cover" position="left" radius="10"
+                        src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg"  />
                 </div>
                 <div>
-                    <div>{{ detailValue.company.name }}</div>
+                    <div style="margin-bottom: 5px; font-size: 1rem;">{{ detailValue.company.name }}</div>
                     <div>
                         <van-rate color="#ffd21e" v-model="detailValue.company.review.score" readonly />
                         <span style="margin-right: 10px;">{{ detailValue.company.review.score }}分</span>
@@ -16,6 +16,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="go-back" @click="goback">
+            <van-icon name="arrow-left" />
         </div>
     </van-cell>
     <van-tabs v-model:active="active" class="company-tab">
@@ -43,6 +46,10 @@ onBeforeMount(() => {
     console.log('11111111111111111')
     onLoad()
 })
+
+const goback = () => {
+  router.go(-1)
+}
 
 const onLoad = () => {
     detailValue.value = {
@@ -216,5 +223,12 @@ const ToCompanyDetail = () => {
     .van-tab__text--ellipsis {
         font-size: 1.1rem;
     }
+}
+.go-back {
+    font-size: 1.5rem;
+    position: absolute;
+    top: 1rem;
+    color: #fff;
+    left: 0.5rem;
 }
 </style>

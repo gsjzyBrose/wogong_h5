@@ -111,12 +111,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, watch, watchEffect } from 'vue';
 import router from '@/router';
+import { useRoute } from 'vue-router';
 import { showToast } from 'vant';
 import areaOption from '@/util/areaOption'
 
-
+const route = useRoute()
 const listAll = ref([]);
 const loading = ref(false);
 const finished = ref(false);
@@ -132,7 +133,6 @@ const searchFormRef = ref({
     education: null,
     job_benefits: null
 })
-console.log(areaOption, 'areaOption')
 const treeData = areaOption.areaOption;
 const option2 = [
     { text: '排序', value: 'a' },
@@ -274,6 +274,7 @@ const changeValue = (item, type)=> {
 const onConfirm = () => {
     itemRef.value.toggle();
 }
+
 </script>
 
 <style lang="scss">

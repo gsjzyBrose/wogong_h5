@@ -1,26 +1,41 @@
 <template>
     <div class="detail">
-        <div>
-            <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white">
-                <van-swipe-item>1</van-swipe-item>
-                <van-swipe-item>2</van-swipe-item>
-                <van-swipe-item>3</van-swipe-item>
-                <van-swipe-item>4</van-swipe-item>
+        <div style="position: relative;">
+            <van-swipe class="my-swipe" ref="swipeRef" :autoplay="3000" indicator-color="white" @change="setTabActive">
+                <van-swipe-item v-for="(item, index) in imgList">
+                    <img :src="item.url" style="width: 100%;height: 10rem;">
+                </van-swipe-item>
+                <template #indicator="{ active, total }">
+                    <div class="custom-indicator">{{ active + 1 }}/{{ total }}</div>
+                </template>
             </van-swipe>
+            <div style="width: 100%;" class="type-box">
+                <div @click="setTypeTab('plant')" v-if="detailValue.environment.plant.length > 0"
+                    :class="imgType == 'plant' ? 'active' : ''">厂区</div>
+                <div @click="setTypeTab('work')" v-if="detailValue.environment.work.length > 0"
+                    :class="imgType == 'work' ? 'active' : ''">工作</div>
+                <div @click="setTypeTab('meal_room')" v-if="detailValue.environment.meal_room.length > 0"
+                    :class="imgType == 'meal_room' ? 'active' : ''">食宿</div>
+                <div @click="setTypeTab('life')" v-if="detailValue.environment.life.length > 0"
+                    :class="imgType == 'life' ? 'active' : ''">生活</div>
+            </div>
+            <div class="go-back" @click="goback">
+                <van-icon name="arrow-left" />
+            </div>
         </div>
         <div class="detail-card">
             <van-cell value-class="job-info">
                 <van-row style="padding-top: 8px;">
                     <van-col span="12" class="job-name">{{ detailValue.base_info.title }}</van-col>
                     <van-col span="12" style="text-align: right;">
-                        <span>刷新时间: {{ detailValue.base_info.updated_at }}</span>
+                        <span>刷新时间: {{ formatter(detailValue.base_info.updated_at) }}</span>
                     </van-col>
                 </van-row>
             </van-cell>
             <van-cell>
                 <van-row>
                     <van-col span="12" style="color: rgb(249, 70, 31);">{{ detailValue.base_info.salary.scale
-                        }}</van-col>
+                    }}</van-col>
                     <van-col span="12" class="info-right" style="text-align: right;">
                         <span>{{ detailValue.base_info.salary.label }}</span>
                         <span>{{ detailValue.base_info.salary.desc }}</span>
@@ -127,9 +142,12 @@
 <script lang="ts" setup>
 import { ref, reactive, onBeforeMount } from 'vue';
 import router from '@/router';
+import moment from 'moment';
 
-const value = ref(3);
+const swipeRef = ref()
 const detailValue = ref()
+const imgList = ref([])
+const imgType = ref('')
 
 onBeforeMount(() => {
     console.log('11111111111111111')
@@ -140,16 +158,22 @@ const onLoad = () => {
     detailValue.value = {
         environment: {
             plant: [
-                "company/environment/00000017/1756694476067-微信图片_20250901102221.jpg"
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1922285085292511234&tenCode=snowy",
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1922286178848227329&tenCode=snowy"
+
             ],
             work: [
-                "company/environment/00000017/1756694500553-微信图片_20250901102214.jpg"
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1922286559204491265&tenCode=snowy",
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1922287266762604545&tenCode=snowy"
             ],
             meal_room: [
-                "company/environment/00000017/1756694514362-微信图片_20250901102111.jpg",
-                "company/environment/00000017/1756694520551-微信图片_20250901102118.jpg"
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1922287907408986114&tenCode=snowy",
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1936948976938926082"
             ],
-            life: []
+            life: [
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1936948514688876546",
+                "https://snowyapi.xiaonuo.vip/dev/file/download?id=1935264681694347265"
+            ]
         },
         base_info: {
             title: "万祥小时工",
@@ -197,10 +221,66 @@ const onLoad = () => {
             mobile: "18262397326"
         }
     }
+    detailValue.value.environment.plant.forEach((item, index) => {
+        if (item) {
+            imgList.value.push({
+                url: item,
+                type: 'plant',
+                index: index
+            })
+        }
+    });
+    detailValue.value.environment.work.forEach((item, index) => {
+        if (item) {
+            imgList.value.push({
+                url: item,
+                type: 'work',
+                index: index
+            })
+        }
+
+    });
+    detailValue.value.environment.meal_room.forEach((item, index) => {
+        if (item) {
+            imgList.value.push({
+                url: item,
+                type: 'meal_room',
+                index: index
+            })
+        }
+
+    });
+    detailValue.value.environment.life.forEach((item, index) => {
+        if (item) {
+            imgList.value.push({
+                url: item,
+                type: 'life',
+                index: index
+            })
+        }
+
+    });
     console.log(detailValue.value)
 };
-const toCompanyDetail = () => {
-    router.push('companyDetail');
+const setTabActive = (index) => {
+    imgType.value = imgList.value[index].type
+}
+const setTypeTab = (type) => {
+    const index = imgList.value.findIndex(item => {
+        return item.type == type
+    })
+    if (index) {
+        swipeRef.value.swipeTo(index)
+    } else {
+        swipeRef.value.swipeTo(0)
+    }
+    console.log(index, 'index')
+}
+const goback = () => {
+    router.go(-1)
+}
+const formatter = (date) => {
+    return date? moment(date).format('YYYY-MM-DD') : ''
 }
 </script>
 
@@ -274,11 +354,48 @@ const toCompanyDetail = () => {
         background-color: #2ee3d0;
         line-height: 1rem;
     }
+
     .footer-flex {
         display: flex;
         flex-direction: row;
         align-items: center;
         padding-left: 16px;
+    }
+
+    .custom-indicator {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+        padding: 2px 5px;
+        font-size: 12px;
+        color: #fff;
+    }
+
+    .type-box {
+        position: absolute;
+        bottom: 5px;
+        font-size: 12px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+
+        >div {
+            padding: 2px 10px;
+            background-color: #2ee3d04d;
+            margin-right: 1px
+        }
+    }
+
+    .active {
+        background-color: #2ee3d0 !important;
+    }
+
+    .go-back {
+        font-size: 1.5rem;
+        position: absolute;
+        top: 1rem;
+        color: #fff;
+        left: 0.5rem;
     }
 }
 </style>
