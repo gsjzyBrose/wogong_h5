@@ -6,19 +6,19 @@
             </van-cell>
             <van-cell>
                 <span>企业类型: </span>
-                <span>{{ detailValue.requirement.age_scale }}</span>
+                <span>{{ props.detailValue?.base_info?.type }}</span>
             </van-cell>
             <van-cell>
                 <span>行业: </span>
-                <span>{{ detailValue.requirement.education }}</span>
+                <span>{{ props.detailValue?.base_info?.industry }}</span>
             </van-cell>
             <van-cell>
                 <span>企业规模: </span>
-                <span>{{ detailValue.requirement.gender }}</span>
+                <span>{{ props.detailValue?.base_info?.scale }}</span>
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
                 <span>企业地址: </span>
-                <span>{{ detailValue.requirement.ethnicity.toString() }}</span>
+                <span style="height: 1.5rem;display: inline-block;overflow: hidden;">{{ props.detailValue?.base_info?.address.toString() }}</span>
             </van-cell>
         </div>
         <div class="detail-card">
@@ -26,9 +26,8 @@
                 <h3 class="detail-title">经营范围</h3>
             </van-cell>
             <van-cell style="padding-bottom: 10px; height: 8rem;" class="salary-intoduce">
-                <!-- {{ detailValue.salary_intoduce }} -->
                 <span class="intoduce-content" ref="intoduceElement">
-                    {{ content }}
+                    {{ props.detailValue?.business_scope }}
                 </span>
             </van-cell>
             <div v-show="showAllIntoduce">
@@ -52,7 +51,7 @@
             </van-cell>
             <van-cell style="padding-bottom: 10px; height: 8rem;"  class="accommoda-box">
                 <span class="accommoda-content" ref="accommodaElement">
-                    {{ detailValue.accommodation }}
+                    {{ props.detailValue?.introduce }}
                 </span>
             </van-cell>
             <div v-show="showAllAccommoda">
@@ -87,9 +86,14 @@ const accommodaElement = ref(null);
 // 存储ResizeObserver实例
 let resizeObserver = null;
 
+const props = defineProps({
+    detailValue: {
+        type: Object,
+        default: {}
+    }
+})
+
 onBeforeMount(() => {
-    console.log('11111111111111111')
-    onLoad()
 })
 
 const onLoad = () => {
@@ -182,7 +186,6 @@ onMounted(() => {
         // 创建ResizeObserver实例
         resizeObserver = new ResizeObserver(entries => {
             for (const entry of entries) {
-                console.log(entry, 'entry')
                 // 获取元素高度
                 const height = entry.contentRect.height;
                 // console.log('元素高度变化为:', height);
@@ -204,7 +207,6 @@ onMounted(() => {
                 }
             }
         });
-        console.log(resizeObserver, 'resizeObserver')
         // 开始监听目标元素
         if (intoduceElement.value) {
             resizeObserver.observe(intoduceElement.value);

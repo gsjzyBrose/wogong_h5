@@ -6,6 +6,6 @@ import VConsole from 'vconsole'
 
 
 const app = createApp(App)
-
+const Vconsole = new VConsole()
 app.use(router)
 app.mount('#app')

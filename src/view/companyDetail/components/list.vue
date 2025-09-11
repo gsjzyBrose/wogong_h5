@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
-            <van-cell-group class="list-item" v-for="item in listAll" :key="item.job_id" @click="toDetail()">
+            <van-cell-group class="list-item" v-for="item in listAll" :key="item.job_id" @click="toDetail(item)">
                 <van-cell value-class="job-info">
                     <van-row>
                         <van-col span="12" class="job-name">{{ item.job_name }}</van-col>
@@ -33,6 +33,7 @@ import { ref, reactive } from 'vue';
 import router from '@/router';
 import { showToast } from 'vant';
 import areaOption from '@/util/areaOption'
+import wogongApi from '@/api/index.js'
 
 
 const listAll = ref([]);
@@ -57,126 +58,30 @@ const option2 = [
     { text: '工资高低排序', value: 'b' },
     { text: '返费高低排序', value: 'c' },
 ];
-
+const props = defineProps({
+    companyId: {
+        type: Number,
+        default: 0
+    }
+})
 const onLoad = () => {
     // 异步更新数据
-    // setTimeout 仅做示例，真实场景中一般为 ajax 请求
-    setTimeout(() => {
-        listAll.value = reactive([
-            {
-                job_id: 71,
-                job_name: "勿动测试",
-                age_scale: "16-35周岁",
-                education: "学历不限",
-                tags: [
-                    "清真食堂",
-                    "厂车接送"
-                ],
-                salary: {
-                    label: "日薪",
-                    desc: "200元/天",
-                    scale: "6000-8000元/月"
-                },
-                company: {
-                    id: 12,
-                    name: "西安安泰测试设备有限公司西安安泰测试设备有限公司",
-                    logo: "company/logo/normal/1756435812935775425624887.jpg",
-                    base: "陕西·西安市"
-                },
-                created_at: "08-29"
-            },
-            {
-                job_id: 54,
-                job_name: "普工",
-                age_scale: "16-35周岁",
-                education: "学历不限",
-                tags: [
-                    "包吃包住"
-                ],
-                salary: {
-                    label: "底薪",
-                    desc: "2585元/月",
-                    scale: "8988-56888元/月"
-                },
-                company: {
-                    id: 1,
-                    name: "兰州德与德网络技术有限公司兰州德与德网络技术有限公司",
-                    logo: "certification/company/00000001/1752131414437758781732746.png",
-                    base: "甘肃·兰州"
-                },
-                created_at: "08-29"
-            },
-            {
-                job_id: 53,
-                job_name: "达昊小时工",
-                age_scale: "18-40周岁",
-                education: "学历不限",
-                tags: [
-                    "五险一金",
-                    "穿静电衣",
-                    "两班倒"
-                ],
-                salary: {
-                    label: "工价",
-                    desc: "25元/小时",
-                    scale: "5500-7000元/月"
-                },
-                company: {
-                    id: 10,
-                    name: "达昊（厦门）制造有限公司",
-                    logo: "company/logo/normal/1756364302140079781755521.jpg",
-                    base: "福建·厦门市"
-                },
-                created_at: "08-29"
-            },
-            {
-                job_id: 51,
-                job_name: "群创小时工",
-                age_scale: "18-45周岁",
-                education: "学历不限",
-                tags: [
-                    "清真食堂",
-                    "穿无尘衣",
-                    "两班倒"
-                ],
-                salary: {
-                    label: "工价",
-                    desc: "24元/小时",
-                    scale: "5500-7500元/月"
-                },
-                company: {
-                    id: 8,
-                    name: "宁波群志光电有限公司",
-                    logo: "company/logo/normal/1756279730925771159380583.jpg",
-                    base: "浙江·宁波市"
-                },
-                created_at: "08-29"
-            },
-            {
-                job_id: 50,
-                job_name: "测试停招",
-                age_scale: "16-38周岁",
-                education: "学历不限",
-                tags: [
-                    "五险一金"
-                ],
-                salary: {
-                    label: "日薪",
-                    desc: "150元/天",
-                    scale: "4000-6000元/月"
-                },
-                company: {
-                    id: 5,
-                    name: "检科测试集团有限公司",
-                    logo: "company/logo/normal/1755658425276096673723813.jpg",
-                    base: "北京·北京市"
-                },
-                created_at: "08-29"
-            }])
-    }, 1000);
+    const params = {
+        page: 1,
+        page_size: 20
+    }
+    wogongApi.getCompanyJobList(props.companyId, params).then(res => {
+        listAll.value = res.list
+        loading.value = false
+        finished.value = true
+    })
 };
-const toDetail = () => { 
-   router.push('listDetail');
+const toDetail = (item) => { 
+   const query = {
+      ...item.detail_param,
+      job_id: item.job_id
+   }
+   router.push({name: 'listDetail', query: query});
 }
 const searchList = () => {
     showSearch.value = true
