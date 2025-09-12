@@ -114,7 +114,7 @@
                         <div style="display: flex;align-items: center;">
                             <div>
                                 <van-image width="3rem" height="3rem" fit="cover" position="left"
-                                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                                    :src="detailValue?.company?.logo" />
                             </div>
                             <div>
                                 <van-cell>{{ detailValue?.company?.name }}</van-cell>
@@ -200,7 +200,9 @@ const pageImg = () => {
             })
         })
     });
-    console.log(imgList.value, 'imgList')
+    getfileAllPATH(detailValue.value.company.logo).then(url => {
+        detailValue.value.company.logo = url
+    })
 };
 
 const getJobDetail = () => {

@@ -113,12 +113,12 @@
                         <div style="display: flex;align-items: center;">
                             <div>
                                 <van-image width="3rem" height="3rem" fit="cover" position="left"
-                                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                                    :src="detailValue?.company?.logo" />
                             </div>
                             <div>
                                 <van-cell>{{ detailValue?.company?.name }}</van-cell>
                                 <van-cell>
-                                    <van-rate color="#ffd21e" :value="detailValue?.company?.review?.score" />
+                                    <van-rate color="#ffd21e" v-model="score" readonly />
                                     <span style="margin-right: 10px;">{{ detailValue?.company?.review?.score }}分</span>
                                     <span
                                         style="display: inline-block;border-left: 1px solid #ddd;padding-right: 2px;">{{
@@ -146,7 +146,7 @@
                         <van-image round width="3rem" height="3rem"
                             src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
                     </span>
-                    <span style="margin-right: 20px;">XXXX</span>
+                    <span style="margin-right: 20px;">{{ detailValue?.customer?.name }}</span>
                     <a class="call-phone" :href="'tel:' + detailValue?.customer?.mobile">
                         <span style="margin-right: 5px;">
                             <van-icon name="phone" />
@@ -175,7 +175,7 @@ const imgList = ref([])
 const imgType = ref('')
 const route = useRoute()
 const baseInfo = ref({})
-
+const score = ref(0)
 const userId = route.query.user_id
 const signature = route.query.signature
 const job_id = route.query.job_id
@@ -221,7 +221,9 @@ const pageImg = () => {
             })
         })
     });
-    console.log(imgList.value, 'imgList')
+    getfileAllPATH(detailValue.value.company.logo).then(url => {
+        detailValue.value.company.logo = url
+    })
 };
 const getJobDetail = () => {
     const params = {
@@ -231,6 +233,7 @@ const getJobDetail = () => {
     wogongApi.getJobDetail(job_id, params).then((res) => {
         console.log()
         detailValue.value = Object.assign({}, res)
+        score.value = detailValue.value.company.review.score
         pageImg()
         wogongApi.postRecruitJob(job_id, { signature: signature }).then(data => {
             console.log(data)
@@ -390,6 +393,12 @@ const getfileAllPATH = (path) => {
             padding: 2px 10px;
             background-color: #2ee3d04d;
             margin-right: 1px
+        }
+        >div:first-child {
+            border-radius: 5px 0 0 5px;
+        }
+        >div:last-child {
+             border-radius: 0 5px 5px 0;
         }
     }
 

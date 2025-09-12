@@ -12,7 +12,7 @@
           v-if="showSearch"
         />
         <van-dropdown-menu>
-            <van-dropdown-item title="全国" ref="itemRef">
+            <van-dropdown-item :title="areaTitle" ref="areaRef">
                 <van-tree-select
                   v-model:active-id="activeId"
                   v-model:main-active-index="activeIndex"
@@ -20,12 +20,12 @@
                   @click-item="changeCity"
                 />
                <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="itemRef.toggle();">重置</van-button>
+                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="resetAreaForm">重置</van-button>
                  <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
                </div>
             </van-dropdown-item>
-            <van-dropdown-item v-model="value2" :options="option2" />
-            <van-dropdown-item title="筛选">
+            <van-dropdown-item v-model="value2" :options="option2" @change="changeSort" />
+            <van-dropdown-item title="筛选" ref="filterRef">
                  <van-cell class="tag-label">
                     <span>职位类型:</span>
                     <span>全部</span>
@@ -33,13 +33,6 @@
                  <van-cell class="tag-value">
                     <span v-for="item in areaOption.workPayTypeOption" :key="item.value" :class="searchFormRef.post_type == item.value ? 'isActive': ''" @click="changeValue(item, 'post_type')"> {{ item.label }} </span>
                  </van-cell>
-                 <!-- <van-cell class="tag-label">
-                    <span>民族:</span>
-                    <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.ethnicity" :key="item.value" :class="searchFormRef.ethnicity == item.value ? 'isActive': ''" @click="changeValue(item, 'ethnicity')"> {{ item.label }} </span>
-                 </van-cell> -->
                  <van-cell class="tag-label">
                     <span>年龄:</span>
                     <span>全部</span>
@@ -62,7 +55,7 @@
                     <span v-for="item in areaOption.benefitsOptions" :key="item.value" :class="searchFormRef.job_benefits == item.value ? 'isActive': ''" @click="changeValue(item, 'job_benefits')"> {{ item.label }} </span>
                  </van-cell>
                  <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;">重置</van-button>
+                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="resetFilterForm">重置</van-button>
                  <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
                </div>
             </van-dropdown-item>
@@ -95,7 +88,7 @@
                         <van-col span="16" class="from-company">
                             <span style="display: flex;">
                                 <van-image width="28" height="28" radius="5"
-                                    src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                                    :src="item.company.logo" />
                             </span>
                             <span style="margin-left: 5px;" class="company-name">{{ item.company.name }}</span>
                         </van-col>
@@ -126,7 +119,8 @@ const showSearch = ref(false)
 const activeId = ref(1);
 const activeIndex = ref(0);
 const value2 = ref('a');
-const itemRef = ref()
+const areaRef = ref()
+const filterRef = ref()
 const searchFormRef = ref({
     ethnicity: null,
     post_type: null,
@@ -143,16 +137,24 @@ const option2 = [
 const userId = ref('')
 const signature = ref('')
 const page = ref(1)
+const areaTitle = ref('全国')
 const onLoad = () => {
     // 异步更新数据
     // setTimeout 仅做示例，真实场景中一般为 ajax 请求
     const params = {
         page: page.value ++,
         page_size: 10,
-        signature: signature.value
+        signature: signature.value,
+        ...searchFormRef.value
     }
+    console.log(params, 'params')
     wogongApi.getJobList(userId.value, params).then(res => {
         listAll.value = [...listAll.value, ...res.list]
+        listAll.value.forEach(item => {
+            getfileAllPATH(item.company.logo).then(url => {
+                item.company.logo = url
+            })
+        })
         loading.value = false;
         console.log(listAll.value)
         if (listAll.value.length >= res.total) {
@@ -172,19 +174,63 @@ const searchList = () => {
 }
 // 获取省市
 const changeCity = (event) => {
-    
+    searchFormRef.value['city'] = event.text
+    areaTitle.value = event.text
+    treeData.forEach(item => {
+        if (item.id == event.parent_id) {
+            searchFormRef.value['province'] = item.text
+        }
+    })
 }
 // 获取筛选参数
 const changeValue = (item, type)=> {
     searchFormRef.value[type] = item.value
 }
 const onConfirm = () => {
-    itemRef.value.toggle();
+    areaRef.value.toggle(false);
+    filterRef.value.toggle(false);
+    page.value = 1
+    listAll.value = []
+    onLoad()
 }
-
+const resetFilterForm = () => {
+    filterRef.value.toggle(false);
+    for (const key in searchFormRef.value) {
+        if (key != 'province' && key != 'city') {
+           searchFormRef.value[key] = ''
+        }
+    }
+    page.value = 1
+    listAll.value = []
+    onLoad()
+}
+const resetAreaForm = () => {
+    areaRef.value.toggle(false);
+    searchFormRef.value.province = ''
+    searchFormRef.value.city = ''
+    areaTitle.value = '全国'
+    page.value = 1
+    listAll.value = []
+    onLoad()
+}
+const changeSort = (event) => {
+    page.value = 1
+    listAll.value = []
+    if (event == 'a') {
+        searchFormRef.value['sort_rule[type]'] = 1
+        searchFormRef.value['sort_rule[order]'] = 'desc'
+    } else if (event == 'b') {
+        searchFormRef.value['sort_rule[type]'] = 2
+        searchFormRef.value['sort_rule[order]'] = 'desc'
+    } else if (event == 'c') {
+        searchFormRef.value['sort_rule[type]'] = 3
+        searchFormRef.value['sort_rule[order]'] = 'asc'
+    }
+    onLoad()
+}
 onMounted(() => {
-    // const url = location.href
-    const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
+    const url = location.href
+    // const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
@@ -192,6 +238,19 @@ onMounted(() => {
     localStorage.setItem('userId', userId.value);
     console.log(signature.value, 'signature')
 })
+
+// 获取图片地址
+const getfileAllPATH = (path) => {
+    return new Promise((resolve, rejects) => {
+        const params = {
+            file_path: path
+        }
+        wogongApi.getfileAllPATH(params).then(res => {
+            resolve(res.sign_url)
+        })
+    })
+
+}
 
 </script>
 
