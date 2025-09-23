@@ -1,16 +1,20 @@
 <template>
     <div class="home">
-        <van-nav-bar v-if="!showSearch">
+        <!-- <van-nav-bar>
             <template #right>
                 <van-icon name="search" size="18" @click="searchList" />
             </template>
-        </van-nav-bar>
+        </van-nav-bar> -->
         <van-search
           background="#2ee3d0"
+          v-model="searchValue"
           show-action
           placeholder="搜索"
-          v-if="showSearch"
-        />
+        >
+          <template #action>
+            <div @click="onClickButton">搜索</div>
+          </template>
+        </van-search>
         <van-dropdown-menu>
             <van-dropdown-item :title="areaTitle" ref="areaRef">
                 <van-tree-select
@@ -112,6 +116,7 @@ import areaOption from '@/util/areaOption.js'
 import wogongApi from '@/api/index.js'
 
 const route = useRoute()
+const searchValue = ref('')
 const listAll = ref([]);
 const loading = ref(false);
 const finished = ref(false);
@@ -169,8 +174,10 @@ const toDetail = (item) => {
    }
    router.push({name: 'detail', query: query});
 }
-const searchList = () => {
-    showSearch.value = true
+
+const onClickButton = () => {
+    searchFormRef.value['keyword'] = searchValue.value
+    onConfirm()
 }
 // 获取省市
 const changeCity = (event) => {
@@ -229,8 +236,8 @@ const changeSort = (event) => {
     onLoad()
 }
 onMounted(() => {
-    const url = location.href
-    // const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
+    // const url = location.href
+    const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
@@ -306,7 +313,6 @@ const getfileAllPATH = (path) => {
 .info-right {
     font-size: 0.7rem;
     border-radius: 10px;
-
     >span:first-child {
         background-color: #2ee3d0;
         color: #fff;
@@ -316,11 +322,14 @@ const getfileAllPATH = (path) => {
     }
 
     >span:last-child {
+        display: inline-block;
         border: 1px solid #2ee3d0;
         border-radius: 0 5px 5px 0;
-        padding: 3px;
+        padding: 0 3px;
         font-size: 0.8rem;
         color: #2ee3d0;
+        width: 4rem;
+        text-align: center;
     }
 }
 
@@ -342,7 +351,12 @@ const getfileAllPATH = (path) => {
 }
 .van-search__action {
     color: #fff;
+    background-color: #2ee3d0 !important;
 }
+.van-search__action:focus {
+    background-color: #2ee3d0 !important;
+}
+
 .van-search__content {
     border-radius: 10px;
 }

@@ -47,6 +47,7 @@ const value = ref(3);
 const detailValue = ref()
 const companyId = route.query.id
 onBeforeMount(() => {
+    window.scrollTo(0,0)
     getCompanyDetail()
 })
 
