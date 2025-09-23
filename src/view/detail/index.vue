@@ -74,10 +74,10 @@
                 <span>性别: </span>
                 <span>{{ detailValue?.requirement?.gender }}</span>
             </van-cell>
-            <van-cell style="padding-bottom: 10px;">
+            <!-- <van-cell style="padding-bottom: 10px;">
                 <span>民族: </span>
                 <span>{{ detailValue?.requirement?.ethnicity.toString() }}</span>
-            </van-cell>
+            </van-cell> -->
         </div>
         <div class="detail-card detail-info">
             <van-cell>
@@ -144,11 +144,11 @@
         <div class="detail-footer">
             <van-cell style="position: fixed; bottom: 0;">
                 <div class="footer-flex">
-                    <span style="margin-right: 20px;">
+                    <span style="margin-right: 20px; display: flex;">
                         <van-image round width="2.5rem" height="2.5rem"
                             src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
                     </span>
-                    <span style="margin-right: 20px; font-size: 1.17em;">{{ detailValue?.customer?.name }}</span>
+                    <span style="margin-right: 20px; font-size: 1.2rem;">{{ detailValue?.customer?.name }}</span>
                     <a class="call-phone" :href="'tel:' + detailValue?.customer?.mobile">
                         <span style="margin-right: 5px;">
                             <van-icon name="phone" />
@@ -346,7 +346,7 @@ const getfileAllPATH = (path) => {
 
     .job-name {
         color: #000;
-        font-size: 1.17em;
+        font-size: 1.2rem;
     }
 
     .cell-footer {

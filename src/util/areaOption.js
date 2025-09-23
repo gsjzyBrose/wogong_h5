@@ -1,5 +1,11 @@
 const areaOption = [
     {
+         "id": 0,
+        "text": "全国",
+        "parent_id": 0,
+        "children": []
+    },
+    {
         "id": 1,
         "text": "北京",
         "parent_id": 0,

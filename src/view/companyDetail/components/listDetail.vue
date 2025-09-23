@@ -29,7 +29,7 @@
             <van-cell value-class="job-info">
                 <van-row style="padding-top: 8px;">
                     <van-col span="12" class="job-name">
-                        <span style="font-size: 1.17em;">
+                        <span>
                             {{ detailValue?.base_info?.title }}
                         </span>
                     </van-col>
@@ -79,10 +79,10 @@
                 <span>性别: </span>
                 <span>{{ detailValue?.requirement?.gender }}</span>
             </van-cell>
-            <van-cell style="padding-bottom: 10px;">
+            <!-- <van-cell style="padding-bottom: 10px;">
                 <span>民族: </span>
                 <span>{{ detailValue?.requirement?.ethnicity.toString() }}</span>
-            </van-cell>
+            </van-cell> -->
         </div>
         <div class="detail-card detail-info">
             <van-cell>
@@ -306,7 +306,7 @@ const getfileAllPATH = (path) => {
 
     .job-name {
         color: #000;
-        font-size: 16px;
+        font-size: 1.2rem;
     }
 
     .cell-footer {

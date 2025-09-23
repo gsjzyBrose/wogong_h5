@@ -4,66 +4,70 @@
             <template #right>
                 <van-icon name="search" size="18" @click="searchList" />
             </template>
-        </van-nav-bar> -->
-        <van-search
-          v-model="searchValue"
-          show-action
-          placeholder="搜索"
-        >
-          <template #action>
-            <div @click="onClickButton">搜索</div>
-          </template>
+</van-nav-bar> -->
+        <van-search v-model="searchValue" show-action placeholder="搜索">
+            <template #action>
+                <div @click="onClickButton">搜索</div>
+            </template>
         </van-search>
         <van-dropdown-menu>
             <van-dropdown-item :title="areaTitle" ref="areaRef">
-                <van-tree-select
-                  v-model:active-id="activeId"
-                  v-model:main-active-index="activeIndex"
-                  :items="treeData"
-                  @click-item="changeCity"
-                />
-               <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="resetAreaForm">重置</van-button>
-                 <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
-               </div>
+                <van-tree-select v-model:active-id="activeId" v-model:main-active-index="activeIndex" :items="treeData"
+                    @click-item="changeCity" @click-nav="changeProvince" />
+                <div>
+                    <van-button type="default" style="width: 50%;border-radius: 0;"
+                        @click="resetAreaForm">重置</van-button>
+                    <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
+                </div>
             </van-dropdown-item>
             <van-dropdown-item v-model="value2" :options="option2" @change="changeSort" />
-            <van-dropdown-item title="筛选" ref="filterRef">
-                 <van-cell class="tag-label">
+            <van-dropdown-item title="筛选" ref="filterRef" style="height: 100%;">
+                <van-cell class="tag-label">
                     <span>职位类型:</span>
                     <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.workPayTypeOption" :key="item.value" :class="searchFormRef.post_type == item.value ? 'isActive': ''" @click="changeValue(item, 'post_type')"> {{ item.label }} </span>
-                 </van-cell>
-                 <van-cell class="tag-label">
+                </van-cell>
+                <van-cell class="tag-value">
+                    <span v-for="item in areaOption.workPayTypeOption" :key="item.value"
+                        :class="searchFormRef.post_type == item.value ? 'isActive' : ''"
+                        @click="changeValue(item, 'post_type')">
+                        {{ item.label }} </span>
+                </van-cell>
+                <van-cell class="tag-label">
                     <span>年龄:</span>
                     <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.ageOptions" :key="item.value" :class="searchFormRef.age_option == item.value ? 'isActive': ''" @click="changeValue(item, 'age_option')"> {{ item.label }} </span>
-                 </van-cell>
-                 <van-cell class="tag-label">
+                </van-cell>
+                <van-cell class="tag-value">
+                    <span v-for="item in areaOption.ageOptions" :key="item.value"
+                        :class="searchFormRef.age_option == item.value ? 'isActive' : ''"
+                        @click="changeValue(item, 'age_option')"> {{ item.label }} </span>
+                </van-cell>
+                <van-cell class="tag-label">
                     <span>学历要求:</span>
                     <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.education" :key="item.value" :class="searchFormRef.education == item.value ? 'isActive': ''" @click="changeValue(item, 'education')"> {{ item.label }} </span>
-                 </van-cell>
-                  <van-cell class="tag-label">
+                </van-cell>
+                <van-cell class="tag-value">
+                    <span v-for="item in areaOption.education" :key="item.value"
+                        :class="searchFormRef.education == item.value ? 'isActive' : ''"
+                        @click="changeValue(item, 'education')">
+                        {{ item.label }} </span>
+                </van-cell>
+                <van-cell class="tag-label">
                     <span>职位福利:</span>
                     <span>全部</span>
-                 </van-cell>
-                 <van-cell class="tag-value">
-                    <span v-for="item in areaOption.benefitsOptions" :key="item.value" :class="searchFormRef.job_benefits == item.value ? 'isActive': ''" @click="changeValue(item, 'job_benefits')"> {{ item.label }} </span>
-                 </van-cell>
-                 <div>
-                 <van-button type="default" style="width: 50%;border-radius: 0;" @click="resetFilterForm">重置</van-button>
-                 <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
-               </div>
+                </van-cell>
+                <van-cell class="tag-value">
+                    <span v-for="item in areaOption.benefitsOptions" :key="item.value"
+                        :class="searchFormRef.job_benefits == item.value ? 'isActive' : ''"
+                        @click="changeValue(item, 'job_benefits')"> {{ item.label }} </span>
+                </van-cell>
+                <div>
+                    <van-button type="default" style="width: 50%;border-radius: 0;"
+                        @click="resetFilterForm">重置</van-button>
+                    <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
+                </div>
             </van-dropdown-item>
         </van-dropdown-menu>
-        <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了"  @load="onLoad">
+        <van-list v-model:loading="loading" :finished="finished" finished-text="没有更多了" @load="onLoad">
             <van-cell-group class="list-item" v-for="item in listAll" :key="item.job_id" @click="toDetail(item)">
                 <van-cell value-class="job-info">
                     <van-row>
@@ -84,20 +88,20 @@
                     </van-row>
                 </van-cell>
                 <van-cell value-class="job-tab">
-                    <van-tag round type="primary" style="color: #999999;" color="#f5f5f5" v-for="(tagItem, index) in item.tags" :key="index">{{ tagItem }}</van-tag>
+                    <van-tag round type="primary" style="color: #999999;" color="#f5f5f5"
+                        v-for="(tagItem, index) in item.tags" :key="index">{{ tagItem }}</van-tag>
                 </van-cell>
                 <van-cell value-class="job-from">
                     <van-row>
                         <van-col span="16" class="from-company">
                             <span style="display: flex;">
-                                <van-image width="28" height="28" radius="5"
-                                    :src="item.company.logo" />
+                                <van-image width="28" height="28" radius="5" :src="item.company.logo" />
                             </span>
                             <span style="margin-left: 5px;" class="company-name">{{ item.company.name }}</span>
                         </van-col>
                         <van-col span="8" class="date-adress">
                             <span style="margin-right: 8px; font-size: 0.8rem;">{{ item.company.base }}</span>
-                            <span style="font-size: 0.8rem">07-06</span>
+                            <!-- <span style="font-size: 0.8rem">07-06</span> -->
                         </van-col>
                     </van-row>
                 </van-cell>
@@ -146,7 +150,7 @@ const onLoad = () => {
     // 异步更新数据
     // setTimeout 仅做示例，真实场景中一般为 ajax 请求
     const params = {
-        page: page.value ++,
+        page: page.value++,
         page_size: 10,
         signature: signature.value,
         ...searchFormRef.value
@@ -160,18 +164,17 @@ const onLoad = () => {
             })
         })
         loading.value = false;
-        console.log(listAll.value)
         if (listAll.value.length >= res.total) {
-             finished.value = true;
+            finished.value = true;
         }
     })
 };
-const toDetail = (item) => { 
-   const query = {
-      ...item.detail_param,
-      job_id: item.job_id
-   }
-   router.push({name: 'detail', query: query});
+const toDetail = (item) => {
+    const query = {
+        ...item.detail_param,
+        job_id: item.job_id
+    }
+    router.push({ name: 'detail', query: query });
 }
 
 const onClickButton = () => {
@@ -188,8 +191,20 @@ const changeCity = (event) => {
         }
     })
 }
+const changeProvince = (event) => {
+    console.log(event, 'changeProvince')
+    treeData.forEach(item => {
+        if (item.id == event) {
+            searchFormRef.value['province'] = item.text
+            if (item.text == '全国') {
+                searchFormRef.value['province'] = ''
+            }
+            areaTitle.value = item.text
+        }
+    })
+}
 // 获取筛选参数
-const changeValue = (item, type)=> {
+const changeValue = (item, type) => {
     searchFormRef.value[type] = item.value
 }
 const onConfirm = () => {
@@ -203,7 +218,7 @@ const resetFilterForm = () => {
     filterRef.value.toggle(false);
     for (const key in searchFormRef.value) {
         if (key != 'province' && key != 'city') {
-           searchFormRef.value[key] = ''
+            searchFormRef.value[key] = ''
         }
     }
     page.value = 1
@@ -264,6 +279,7 @@ const getfileAllPATH = (path) => {
 .job-info {
     padding-top: 0.5rem;
 }
+
 .job-filter {
     text-align: left;
 }
@@ -280,6 +296,7 @@ const getfileAllPATH = (path) => {
 
     .date-adress {
         justify-content: end;
+        color: #A09DB9 !important;
     }
 }
 
@@ -293,12 +310,14 @@ const getfileAllPATH = (path) => {
 
 .job-tab {
     display: flex;
-    justify-content:flex-start;
+    justify-content: flex-start;
+
     >.van-tag {
         padding: 2px 5px;
         margin-right: 10px;
     }
-    >.van-tag:last-child{
+
+    >.van-tag:last-child {
         margin-right: 0;
     }
 }
@@ -312,6 +331,7 @@ const getfileAllPATH = (path) => {
 .info-right {
     font-size: 0.7rem;
     border-radius: 10px;
+
     >span:first-child {
         background-color: #2ee3d0;
         color: #fff;
@@ -342,39 +362,47 @@ const getfileAllPATH = (path) => {
 .van-cell:after {
     display: none !important;
 }
+
 .company-name {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
     color: rgb(136, 136, 136);
 }
+
 .van-search__action {
-    color:#888888 !important;
+    color: #888888 !important;
 }
-input::placeholder{
+
+input::placeholder {
     // color: #888888 !important;
 }
 
 .van-search__content {
     border-radius: 10px;
-    background-color: #F2F0F0 !important;
-    color:#888888;
+    background-color: #EDEDED !important;
+    color: #888888;
 }
+
 .tag-label {
     .van-cell__value {
         text-align: left;
+
         >span:last-child {
             margin-left: 6px;
             color: #2ee3d0;
         }
     }
 }
+
 .tag-value {
     padding-top: 0;
+
     .van-cell__value {
         text-align: left;
         display: flex;
-        flex-wrap: wrap ;
+        flex-wrap: wrap;
+
         >span {
             display: inline-block;
             padding: 2px 5px;
@@ -386,8 +414,15 @@ input::placeholder{
         }
     }
 }
+
 .isActive {
     background-color: #2ee3d0;
     color: #fff;
 }
-</style>
+
+// .van-sidebar-item {
+// 	color: #A09DB9 !important;
+// }
+// .van-tree-select__item {
+//     color: #A09DB9 !important;
+// }</style>

@@ -162,11 +162,14 @@ const onConfirm = () => {
     }
 
     >span:last-child {
+        display: inline-block;
         border: 1px solid #2ee3d0;
         border-radius: 0 5px 5px 0;
-        padding: 3px;
+        padding: 0 3px;
         font-size: 0.8rem;
         color: #2ee3d0;
+        width: 4rem;
+        text-align: center;
     }
 }
 
