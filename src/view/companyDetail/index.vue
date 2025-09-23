@@ -9,10 +9,10 @@
                 <div>
                     <div style="margin-bottom: 5px; font-size: 1rem;">{{ detailValue?.name }}</div>
                     <div>
-                        <van-rate color="#ffd21e" :value="detailValue?.review?.score" readonly />
-                        <span style="margin-right: 10px;">{{ detailValue?.company?.review?.score }}分</span>
-                        <!-- <span style="display: inline-block;border-left: 1px solid #fff;padding-left: 2px;">
-                            {{ detailValue?.company?.review?.count }}条点评</span> -->
+                     <van-icon name="location" />
+                     <span style="overflow: hidden;">{{ detailValue?.base_info?.address.toString() }}</span>
+                        <!-- <van-rate color="#ffd21e" :value="detailValue?.review?.score" readonly />
+                        <span style="margin-right: 10px;">{{ detailValue?.company?.review?.score }}分</span> -->
                     </div>
                 </div>
             </div>

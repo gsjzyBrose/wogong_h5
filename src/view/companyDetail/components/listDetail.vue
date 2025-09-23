@@ -25,10 +25,14 @@
         </div>
 
 
-       <div class="detail-card">
+        <div class="detail-card">
             <van-cell value-class="job-info">
                 <van-row style="padding-top: 8px;">
-                    <van-col span="12" class="job-name">{{ detailValue?.base_info?.title }}</van-col>
+                    <van-col span="12" class="job-name">
+                        <span style="font-size: 1.17em;">
+                            {{ detailValue?.base_info?.title }}
+                        </span>
+                    </van-col>
                     <van-col span="12" style="text-align: right;">
                         <span>刷新时间: {{ formatter(detailValue?.base_info?.updated_at) }}</span>
                     </van-col>
@@ -37,7 +41,7 @@
             <van-cell>
                 <van-row>
                     <van-col span="12" style="color: rgb(249, 70, 31);">{{ detailValue?.base_info?.salary?.scale
-                    }}</van-col>
+                        }}</van-col>
                     <van-col span="12" class="info-right" style="text-align: right;">
                         <span>{{ detailValue?.base_info?.salary?.label }}</span>
                         <span>{{ detailValue?.base_info?.salary?.desc }}</span>
@@ -59,7 +63,7 @@
                 <span>{{ detailValue?.base_info?.address }}</span>
             </van-cell>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">职位要求</h3>
             </van-cell>
@@ -80,28 +84,32 @@
                 <span>{{ detailValue?.requirement?.ethnicity.toString() }}</span>
             </van-cell>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">工资待遇</h3>
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
-                {{ detailValue.salary_intoduce }}
+               <span>
+                 {{ detailValue.salary_intoduce }}
+               </span>
             </van-cell>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">饮食住宿</h3>
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
-                {{ detailValue.accommodation }}
+                <span>
+                    {{ detailValue.accommodation }}
+                </span>
             </van-cell>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">其他说明</h3>
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
-                {{ detailValue.notes }}
+               <span> {{ detailValue.notes }}</span>
             </van-cell>
         </div>
         <div class="detail-card">
@@ -109,28 +117,26 @@
                 <h3 class="detail-title">企业简介</h3>
             </van-cell>
             <van-cell>
-                <div style="display: flex;justify-content: space-between;align-items: center;" @click="toCompanyDetail(detailValue.company.id)">
+                <div style="display: flex;justify-content: space-between;align-items: center;"
+                    @click="toCompanyDetail(detailValue.company.id)">
                     <div>
                         <div style="display: flex;align-items: center;">
                             <div>
-                                <van-image width="3rem" height="3rem" fit="cover" position="left"
+                                <van-image width="3rem" height="3rem" radius="10" fit="cover" position="left"
                                     :src="detailValue?.company?.logo" />
                             </div>
                             <div>
-                                <van-cell>{{ detailValue?.company?.name }}</van-cell>
                                 <van-cell>
-                                    <van-rate color="#ffd21e" :value="detailValue?.company?.review?.score" />
-                                    <span style="margin-right: 10px;">{{ detailValue?.company?.review?.score }}分</span>
-                                    <span
-                                        style="display: inline-block;border-left: 1px solid #ddd;padding-right: 2px;">{{
-                                            detailValue?.company?.review?.count }}条点评</span>
+                                    <span style="color: #000;">
+                                        {{ detailValue?.company?.name }}
+                                    </span>
+                                </van-cell>
+                                <van-cell class="adress-flex">
+                                    <van-icon name="location" />
+                                    <span style="display: inline-block; height: 1.5rem; overflow: hidden;">{{
+                                        detailValue?.company?.address }}</span>
                                 </van-cell>
                             </div>
-                        </div>
-                        <div>
-                            <van-icon name="location" />
-                            <span style="display: inline-block; height: 1.5rem; overflow: hidden;">{{
-                                detailValue?.company?.address }}</span>
                         </div>
                     </div>
                     <div>
@@ -237,7 +243,7 @@ const goback = () => {
     router.go(-1)
 }
 const formatter = (date) => {
-    return date? moment(date).format('YYYY-MM-DD') : ''
+    return date ? moment(date).format('YYYY-MM-DD') : ''
 }
 // 获取图片地址
 const getfileAllPATH = (path) => {
@@ -366,6 +372,20 @@ const getfileAllPATH = (path) => {
         top: 1rem;
         color: #fff;
         left: 0.5rem;
+    }
+    .adress-flex {
+        >.van-cell__value {
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+.detail-info {
+    .van-cell__value {
+        >span {
+            font-size: 1.17em;
+            line-height: 2rem;
+        }
     }
 }
 </style>

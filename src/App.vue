@@ -10,4 +10,7 @@ body {
   background-color: #f8f8f8;
   -webkit-font-smoothing: antialiased;
 }
+:root {
+    --van-cell-font-size: 1.17em;
+}
 </style>

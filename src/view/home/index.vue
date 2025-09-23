@@ -6,7 +6,6 @@
             </template>
         </van-nav-bar> -->
         <van-search
-          background="#2ee3d0"
           v-model="searchValue"
           show-action
           placeholder="搜索"
@@ -236,8 +235,8 @@ const changeSort = (event) => {
     onLoad()
 }
 onMounted(() => {
-    // const url = location.href
-    const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
+    const url = location.href
+    // const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
@@ -350,15 +349,16 @@ const getfileAllPATH = (path) => {
     color: rgb(136, 136, 136);
 }
 .van-search__action {
-    color: #fff;
-    background-color: #2ee3d0 !important;
+    color:#888888 !important;
 }
-.van-search__action:focus {
-    background-color: #2ee3d0 !important;
+input::placeholder{
+    // color: #888888 !important;
 }
 
 .van-search__content {
     border-radius: 10px;
+    background-color: #F2F0F0 !important;
+    color:#888888;
 }
 .tag-label {
     .van-cell__value {

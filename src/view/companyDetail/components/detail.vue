@@ -1,6 +1,6 @@
 <template>
     <div class="detail">
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">基本信息</h3>
             </van-cell>
@@ -18,10 +18,10 @@
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
                 <span>企业地址: </span>
-                <span style="height: 1.5rem;display: inline-block;overflow: hidden;">{{ props.detailValue?.base_info?.address.toString() }}</span>
+                <span style="overflow: hidden;">{{ props.detailValue?.base_info?.address.toString() }}</span>
             </van-cell>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">经营范围</h3>
             </van-cell>
@@ -45,7 +45,7 @@
                 </van-cell>
             </div>
         </div>
-        <div class="detail-card">
+        <div class="detail-card detail-info">
             <van-cell>
                 <h3 class="detail-title">企业介绍</h3>
             </van-cell>
@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onBeforeMount, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { ref, reactive, onBeforeMount, onMounted, onBeforeUnmount,onUpdated,nextTick } from 'vue';
 import router from '@/router';
 const detailValue = ref()
 const showIntoduce = ref(false)
@@ -171,23 +171,34 @@ const packupIntoduce = () => {
     element.style.overflow = 'hidden'
 }
 const pushAccommoda = () => {
+    showIntoduce.value = true
+    const element = document.querySelectorAll('.accommoda-box')[0]
+    element.style.height = 'auto'
+    element.style.overflow = 'unset'
     showAccommoda.value = true
 }
 const packUpAccommoda = () => {
+    showIntoduce.value = true
+    const element = document.querySelectorAll('.accommoda-box')[0]
+    element.style.height = '8rem'
+    element.style.overflow = 'unset'
     showAccommoda.value = false
 }
 
-onMounted(() => {
+onUpdated(() => {
     // 获取根元素的字体大小
     const rootFontSize = window.getComputedStyle(document.documentElement).fontSize;
     // 将字体大小转换为数字（例如，如果字体大小是"16px"，则转换为16）
-    const fontSize = parseFloat(rootFontSize)
+    // const fontSize = parseFloat(rootFontSize)
+    const fontSize = 16.38
     nextTick(() => {
         // 创建ResizeObserver实例
         resizeObserver = new ResizeObserver(entries => {
             for (const entry of entries) {
                 // 获取元素高度
-                const height = entry.contentRect.height;
+                console.log(entries, 'entries')
+                const height = entry.target.offsetHeight;
+                 console.log(height, 'height')
                 // console.log('元素高度变化为:', height);
                 // 在这里可以处理高度变化的逻辑
                 if (height < 8 * fontSize) {
@@ -310,6 +321,14 @@ onBeforeUnmount(() => {
         .van-cell__value {
             text-align: center;
             color: #2ee3d0;
+        }
+    }
+}
+.detail-info {
+    .van-cell__value {
+        >span {
+            font-size: 1.17em;
+            line-height: 2rem;
         }
     }
 }
