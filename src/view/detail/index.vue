@@ -36,7 +36,7 @@
             <van-cell>
                 <van-row>
                     <van-col span="12" style="color: rgb(249, 70, 31);">{{ detailValue?.base_info?.salary?.scale
-                        }}</van-col>
+                    }}</van-col>
                     <van-col span="12" class="info-right" style="text-align: right;">
                         <span>{{ detailValue?.base_info?.salary?.label }}</span>
                         <span>{{ detailValue?.base_info?.salary?.desc }}</span>
@@ -102,8 +102,8 @@
                 <h3 class="detail-title">其他说明</h3>
             </van-cell>
             <van-cell style="padding-bottom: 10px;">
-                <span>
-                    {{ detailValue.notes }}
+                <span v-if="notesList.length > 0">
+                    <div v-for="(item, index) in notesList" :key="index"> {{ item }} </div>
                 </span>
             </van-cell>
         </div>
@@ -121,7 +121,7 @@
                                     :src="detailValue?.company?.logo" />
                             </div>
                             <div>
-                                <van-cell >
+                                <van-cell>
                                     <span style="color: #000;">
                                         {{ detailValue?.company?.name }}
                                     </span>
@@ -146,7 +146,7 @@
                 <div class="footer-flex">
                     <span style="margin-right: 20px; display: flex;">
                         <van-image round width="2.5rem" height="2.5rem"
-                            src="https://fastly.jsdelivr.net/npm/@vant/assets/cat.jpeg" />
+                            :src="detailValue?.customer?.avatar" />
                     </span>
                     <span style="margin-right: 20px; font-size: 1.2rem;">{{ detailValue?.customer?.name }}</span>
                     <a class="call-phone" :href="'tel:' + detailValue?.customer?.mobile">
@@ -169,7 +169,7 @@ import { useRoute } from 'vue-router';
 import wogongApi from '@/api/index.js'
 
 
-
+const notesList = ref([])
 const value = ref(3);
 const swipeRef = ref()
 const detailValue = ref({})
@@ -226,6 +226,9 @@ const pageImg = () => {
     getfileAllPATH(detailValue.value.company.logo).then(url => {
         detailValue.value.company.logo = url
     })
+    getfileAllPATH(detailValue.value.customer.avatar).then(url => {
+        detailValue.value.customer.avatar = url
+    })
 };
 const getJobDetail = () => {
     const params = {
@@ -233,8 +236,8 @@ const getJobDetail = () => {
         signature: signature
     }
     wogongApi.getJobDetail(job_id, params).then((res) => {
-        console.log()
         detailValue.value = Object.assign({}, res)
+        notesList.value = res.notes.split('\n')
         score.value = detailValue.value.company.review.score
         pageImg()
         wogongApi.postRecruitJob(job_id, { signature: signature }).then(data => {
@@ -262,6 +265,9 @@ const formatter = (date) => {
 }
 // 获取图片地址
 const getfileAllPATH = (path) => {
+    if (!path) {
+        return
+    }
     return new Promise((resolve, rejects) => {
         const params = {
             file_path: path

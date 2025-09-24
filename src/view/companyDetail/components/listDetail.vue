@@ -247,6 +247,9 @@ const formatter = (date) => {
 }
 // 获取图片地址
 const getfileAllPATH = (path) => {
+    if (!path) {
+        return
+    }
     return new Promise((resolve, rejects) => {
         const params = {
             file_path: path

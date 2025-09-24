@@ -260,18 +260,19 @@ const changeSort = (event) => {
     onLoad()
 }
 onMounted(() => {
-    // const url = location.href
-    const url = 'https://test-h5.dydwgw.com/?user_id=99&signature=b6a6ea8ac1bdad1301d5b649f7b1ca0b71beb3825579851789b8f25bce989db4#/home'
+    const url = location.href
+    // const url = 'https://test-h5.dydwgw.com/?user_id=99&signature=b6a6ea8ac1bdad1301d5b649f7b1ca0b71beb3825579851789b8f25bce989db4#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
-    console.log(userId.value, 'userId')
     localStorage.setItem('userId', userId.value);
-    console.log(signature.value, 'signature')
 })
 
 // 获取图片地址
 const getfileAllPATH = (path) => {
+    if (!path) {
+        return
+    }
     return new Promise((resolve, rejects) => {
         const params = {
             file_path: path
