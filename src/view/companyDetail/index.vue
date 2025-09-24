@@ -8,7 +8,11 @@
                 </div>
                 <div>
                     <div style="margin-bottom: 5px; font-size: 1rem;">{{ detailValue?.name }}</div>
-                    <div>
+                    <div style="height: 1.5rem;
+                               width: 15rem;
+                               overflow: hidden;
+                               text-overflow: ellipsis;
+                               white-space: nowrap;">
                      <van-icon name="location" />
                      <span style="overflow: hidden;">{{ detailValue?.base_info?.address.toString() }}</span>
                         <!-- <van-rate color="#ffd21e" :value="detailValue?.review?.score" readonly />

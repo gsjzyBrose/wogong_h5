@@ -17,7 +17,7 @@
                             <span style="margin-right: 16px;">{{ item.age_scale }}</span>
                             <span>{{ item.education }}</span>
                         </van-col>
-                        <van-col span="8"> {{ item.salary.scale }} </van-col>
+                        <van-col span="8"  style="color: rgb(249, 70, 31);"> {{ item.salary.scale }} </van-col>
                     </van-row>
                 </van-cell>
                 <van-cell value-class="job-tab">

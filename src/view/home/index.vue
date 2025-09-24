@@ -5,7 +5,7 @@
                 <van-icon name="search" size="18" @click="searchList" />
             </template>
 </van-nav-bar> -->
-        <van-search v-model="searchValue" show-action placeholder="搜索">
+        <van-search v-model="searchValue" @search="onClickButton" show-action placeholder="搜索">
             <template #action>
                 <div @click="onClickButton">搜索</div>
             </template>
@@ -85,7 +85,7 @@
                             <span style="margin-right: 16px;">{{ item.age_scale }}</span>
                             <span>{{ item.education }}</span>
                         </van-col>
-                        <van-col span="8"> {{ item.salary.scale }} </van-col>
+                        <van-col span="8" style="color: rgb(249, 70, 31);"> {{ item.salary.scale }} </van-col>
                     </van-row>
                 </van-cell>
                 <van-cell value-class="job-tab">
@@ -261,7 +261,7 @@ const changeSort = (event) => {
 }
 onMounted(() => {
     const url = location.href
-    // const url = 'https://test-h5.dydwgw.com/?user_id=99&signature=b6a6ea8ac1bdad1301d5b649f7b1ca0b71beb3825579851789b8f25bce989db4#/home'
+    // const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
