@@ -19992,27 +19992,27 @@ const education = [
         value: 0
     },
     {
-        label: '会写名字',
+        label: '小学',
         value: 1
     },
     {
-        label: '会填简历',
+        label: '初中',
         value: 2
     },
     {
-        label: '小学',
+        label: '高中',
         value: 3
     },
     {
-        label: '初中/高中',
+        label: '中专',
         value: 4
     },
     {
-        label: '中专',
+        label: '大专',
         value: 5
     },
     {
-        label: '大专',
+        label: '本科及以上',
         value: 6
     }
 ]

@@ -17,14 +17,14 @@
                 <div>
                     <van-button type="default" style="width: 50%;border-radius: 0;"
                         @click="resetAreaForm">重置</van-button>
-                    <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
+                    <van-button style="width: 50%;border-radius: 0; background-color: #2ee3d0; color: #fff;" @click="onConfirm">确定</van-button>
                 </div>
             </van-dropdown-item>
             <van-dropdown-item v-model="value2" :options="option2" @change="changeSort" />
-            <van-dropdown-item title="筛选" ref="filterRef" style="height: 100%;">
+            <van-dropdown-item :title="'筛选'+ (changeNum == 0 ? '': changeNum)" ref="filterRef" style="height: 100%;">
                 <van-cell class="tag-label">
                     <span>职位类型:</span>
-                    <span>全部</span>
+                    <span>{{ searchFormRef.post_type == null ? '全部' : areaOption.workPayTypeOption[searchFormRef.post_type].label }}</span>
                 </van-cell>
                 <van-cell class="tag-value">
                     <span v-for="item in areaOption.workPayTypeOption" :key="item.value"
@@ -34,7 +34,7 @@
                 </van-cell>
                 <van-cell class="tag-label">
                     <span>年龄:</span>
-                    <span>全部</span>
+                    <span>{{ searchFormRef.age_option == null ? '全部' : areaOption.ageOptions[searchFormRef.age_option].label }}</span>
                 </van-cell>
                 <van-cell class="tag-value">
                     <span v-for="item in areaOption.ageOptions" :key="item.value"
@@ -43,7 +43,8 @@
                 </van-cell>
                 <van-cell class="tag-label">
                     <span>学历要求:</span>
-                    <span>全部</span>
+                    <span v-if="searchFormRef.education == 0"> 学历不限 </span>
+                    <span v-else>{{ searchFormRef.education == null ? '全部' : areaOption.education[searchFormRef.education + 1].label}}</span>
                 </van-cell>
                 <van-cell class="tag-value">
                     <span v-for="item in areaOption.education" :key="item.value"
@@ -53,7 +54,7 @@
                 </van-cell>
                 <van-cell class="tag-label">
                     <span>职位福利:</span>
-                    <span>全部</span>
+                    <span>{{ searchFormRef.job_benefits == null ? '全部' : areaOption.benefitsOptions[searchFormRef.job_benefits].label }}</span>
                 </van-cell>
                 <van-cell class="tag-value">
                     <span v-for="item in areaOption.benefitsOptions" :key="item.value"
@@ -63,7 +64,7 @@
                 <div>
                     <van-button type="default" style="width: 50%;border-radius: 0;"
                         @click="resetFilterForm">重置</van-button>
-                    <van-button type="primary" style="width: 50%;border-radius: 0;" @click="onConfirm">确定</van-button>
+                    <van-button style="width: 50%;border-radius: 0;background-color: #2ee3d0; color: #fff;" @click="onConfirm">确定</van-button>
                 </div>
             </van-dropdown-item>
         </van-dropdown-menu>
@@ -136,6 +137,7 @@ const searchFormRef = ref({
     education: null,
     job_benefits: null
 })
+const changeNum = ref(0)
 const treeData = areaOption.areaOption;
 const option2 = [
     { text: '排序', value: 'a' },
@@ -206,6 +208,13 @@ const changeProvince = (event) => {
 // 获取筛选参数
 const changeValue = (item, type) => {
     searchFormRef.value[type] = item.value
+    // changeNum
+    changeNum.value = 0
+    for (const key in searchFormRef.value) {
+        if (searchFormRef.value[key] != null) {
+            changeNum.value ++
+        }
+    }
 }
 const onConfirm = () => {
     areaRef.value.toggle(false);
@@ -218,11 +227,12 @@ const resetFilterForm = () => {
     filterRef.value.toggle(false);
     for (const key in searchFormRef.value) {
         if (key != 'province' && key != 'city') {
-            searchFormRef.value[key] = ''
+            searchFormRef.value[key] = null
         }
     }
     page.value = 1
     listAll.value = []
+    changeNum.value = 0
     onLoad()
 }
 const resetAreaForm = () => {
@@ -250,8 +260,8 @@ const changeSort = (event) => {
     onLoad()
 }
 onMounted(() => {
-    const url = location.href
-    // const url = 'https://test-h5.dydwgw.com/?user_id=59&signature=4f1035c395308447c112d975202553ed6adb205d1e0f26514baee73261001925#/home'
+    // const url = location.href
+    const url = 'https://test-h5.dydwgw.com/?user_id=99&signature=b6a6ea8ac1bdad1301d5b649f7b1ca0b71beb3825579851789b8f25bce989db4#/home'
     const urlList = url.split('user_id=')[1].split('&signature=')
     userId.value = urlList[0]
     signature.value = urlList[1].split('#/home')[0]
@@ -397,7 +407,7 @@ input::placeholder {
 
 .tag-value {
     padding-top: 0;
-
+    padding-right: 0;
     .van-cell__value {
         text-align: left;
         display: flex;
@@ -405,11 +415,11 @@ input::placeholder {
 
         >span {
             display: inline-block;
-            padding: 2px 5px;
+            padding: 2px 4px;
             border: 1px solid #ececec;
             border-radius: 2px;
-            margin: 2px 5px;
-            width: 4rem;
+            margin: 2px 3px;
+            width: 5rem;
             text-align: center;
         }
     }
